@@ -61,7 +61,7 @@ letras = []
 
 for k in range(Nmaterias):
     print("Numero: "+str(k))
-    print("filas x columnas")
+    print("horas x dias")
     for i in range(Nhoras):
         for j in range(Ndias):
             cod = P(i, j, k, Nhoras, Ndias, Nmaterias)
@@ -78,4 +78,71 @@ for cod in letras:
     print('Hora = '+str(h))
 print(len(letras))
 #-------------------------------------------------------------------------------------------------------------#
+#--------Regla #1 -------------#
+def regla1():
+    inicial2 = 1
+    for m2 in range(1,7):
+        for d2 in range(1, 6):
+            for h2 in range(1,6):
+                if inicial2:
+                    formula2 = P(h2, d2, m2, Nhoras, Ndias, Nmaterias)
+                    inicial2 = False
+                else:
+                    formula2 += P(h2, d2, m2, Nhoras, Ndias, Nmaterias) + "Y"
     
+    
+    inicial = True
+    for m1 in range(1,7):
+        for d1 in range(1, 6):
+            for h1 in range(1,6):
+                if inicial:
+                    if m1 !=m2:
+                        formula1 = P(h1, d1, m1, Nhoras, Ndias, Nmaterias)
+                    inicial = False
+                else:
+                    formula1 += P(h1, d1, m1, Nhoras, Ndias, Nmaterias) + "O"
+    
+    
+    formula = formula2 + "-" + formula1 + '='
+    return formula
+print(regla1())
+#--------Regla #2 -------------#
+
+
+
+
+class Tree(object):
+    def __init__(self, label, left, right):
+        self.left = left
+        self.right = right
+        self.label = label
+
+def String2Tree(A):
+    letrasProposicionales=[chr(x) for x in range(256, 600)]
+    Conectivos = ['O','Y','>','=']
+    Pila = []
+    for c in A:
+        if c in letrasProposicionales:
+            Pila.append(Tree(c,None,None))
+        elif c=='-':
+            FormulaAux = Tree(c,None,Pila[-1])
+            del Pila[-1]
+            Pila.append(FormulaAux)
+        elif c in Conectivos:
+            FormulaAux = Tree(c,Pila[-1],Pila[-2])
+            del Pila[-1]
+            del Pila[-1]
+            Pila.append(FormulaAux)
+        else:
+            print(u"Hay un problema: el símbolo " + str(c)+ " no se reconoce")
+    return Pila[-1]
+
+def Inorderp(f):
+    if f.right == None:
+        return str(Pinv(f.label, Nhoras, Ndias, Nmaterias))
+    elif f.label == '-':
+        return f.label + Inorderp(f.right)
+    else:
+        return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
+    
+print(Inorderp(String2Tree(regla1())))
