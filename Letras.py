@@ -103,12 +103,37 @@ def regla1():
                     formula1 += P(h1, d1, m1, Nhoras, Ndias, Nmaterias) + "O"
     
     
-    formula = formula2 + "-" + formula1 + '='
+    formula = formula1 + "-" + formula2 + '='
     return formula
 print(regla1())
 #--------Regla #2 -------------#
+def regla2():
+    inicial = 1
+    for max_dia in range(1, 4):
+        for d in range(1, 6):
+            for h in range(1, 6):
+                for m in range(1,7):
+                    if inicial:
+                        formula1 = P(m, d, h, Nmaterias, Ndias, Nhoras)
+                        inicial = 0
+                    else:
+                        formula1 += P(m, d, h, Nmaterias, Ndias, Nhoras) + "Y"
+    inicial2 = 1
+    for max_dia2 in range(1, 5):
+        for d in range(1, 6):
+            for h in range(1, 6):
+                for m in range(1,7):
+                    if inicial2:
+                        formula2 = P(m, d, h, Nmaterias, Ndias, Nhoras)
+                        inicial2 = 0
+                    else:
+                        formula2 += P(m, d, h, Nmaterias, Ndias, Nhoras) + "O"
+    formula = formula1 + "-" + formula2 + '='
+    return formula
 
-
+#--------Regla #2 -------------#
+def regla3():
+    
 
 
 class Tree(object):
@@ -145,4 +170,5 @@ def Inorderp(f):
     else:
         return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
     
-print(Inorderp(String2Tree(regla1())))
+#print(Inorderp(String2Tree(regla1())))
+print(Inorderp(String2Tree(regla2())))
