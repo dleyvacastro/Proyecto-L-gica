@@ -131,8 +131,8 @@ def regla2():
     formula = formula1 + "-" + formula2 + '='
     return formula
 
-#--------Regla #2 -------------#
-def regla3():
+
+
     
 
 
