@@ -20,8 +20,7 @@ def tablero(f, n):
 
     for i in range(13):
         for l in range(7):
-            tangulos.append(patches.Rectangle((count, vertical), horizontal, vertical, angle=0.0, facecolor="transparent"))
-        count = count + horizontal
+            tangulos.append(patches.Rectangle((i*horizontal, (j+1)*vertical), horizontal, vertical, angle=0.0, facecolor="transparent")
 
     for i in range(7):
         ver = i*horizontal
@@ -34,4 +33,4 @@ def tablero(f, n):
     for t in tangulos:
         axes.add_patch(t)
 
-    fig.savefig(f"horario_{n}.png")
+    fig.savefig("horario_"+n+".png")
