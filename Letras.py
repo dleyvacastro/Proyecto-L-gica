@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Sun Oct 18 15:08:31 2020
@@ -7,7 +8,7 @@ Created on Sun Oct 18 15:08:31 2020
 
 
 def codifica(d, h, Nd, Nh):
-#    assert(d>=0 and d <= Nd), 'Primer argumento incorrecto! Debe ser un numero entre 0 y ' + str(Nd - 1)  + "\nSe recibio " + str(d)
+    assert(d>=0 and d <= Nd), 'Primer argumento incorrecto! Debe ser un numero entre 0 y ' + str(Nd - 1)  + "\nSe recibio " + str(d)
     assert(h>=0 and h <= Nh), 'Segundo argumento incorrecto! Debe ser un numero entre 0 y ' + str(Nh - 1)  + "\nSe recibio " + str(h)
     
     n = Nd * h +d
@@ -38,7 +39,7 @@ def P(m, d, h, Nm, Nd, Nh):
     codigo = chr(256+v2)
     return codigo
     
-def Pinv(codigo, Nh, Nd, Nm):
+def Pinv(codigo, Nm, Nd, Nh):
     # Funcion que codifica un caracter en su respectiva fila f, columna c y objeto o
     x = ord(codigo) - 256
     v1, m = decodifica(x, Nd * Nh, Nm)
@@ -80,32 +81,53 @@ print(len(letras))
 #-------------------------------------------------------------------------------------------------------------#
 #--------Regla #1 -------------#
 def regla1():
-    inicial2 = 1
+    inicial = 1
+    inicial1 = 1
+    formula = ""
     for m2 in range(1,7):
-        for d2 in range(1, 6):
+        for d2 in range(1,6):
             for h2 in range(1,6):
-                if inicial2:
-                    formula2 = P(h2, d2, m2, Nhoras, Ndias, Nmaterias)
-                    inicial2 = False
-                else:
-                    formula2 += P(h2, d2, m2, Nhoras, Ndias, Nmaterias) + "Y"
-    
-    
-    inicial = True
-    for m1 in range(1,7):
-        for d1 in range(1, 6):
-            for h1 in range(1,6):
                 if inicial:
-                    if m1 !=m2:
-                        formula1 = P(h1, d1, m1, Nhoras, Ndias, Nmaterias)
-                    inicial = False
+                    formula1 = P(m2,d2,h2,Nmaterias, Ndias, Nhoras)
+                    
+                    for m1 in range(1,7):
+                        if inicial1:
+                            if m1 != m2:
+                                formula2 = P(m1,d2,h2,Nmaterias, Ndias, Nhoras)
+                                inicial1 = 0
+                        else:
+                            if m1 != m2:
+                                formula2 += P(m1,d2,h2,Nmaterias, Ndias, Nhoras) + 'O'
+                    formula = formula2 + '-' + formula1 +'>'
+                    
+                    inicial = 0
                 else:
-                    formula1 += P(h1, d1, m1, Nhoras, Ndias, Nmaterias) + "O"
-    
-    
-    formula = formula1 + "-" + formula2 + '='
+                    formula1 = P(m2,d2,h2,Nmaterias, Ndias, Nhoras)
+                    for m1 in range(1,7):
+                        if inicial1:
+                            if m1 != m2:
+                                formula2 = P(m1,d2,h2,Nmaterias, Ndias, Nhoras)
+                                inicial1 = 0
+                        else:
+                            if m1 != m2:
+                                formula2 += P(m1,d2,h2,Nmaterias, Ndias, Nhoras) + 'O'
+                    inicial1 = 1
+                    formula += formula2 + '-' + formula1 + '>' + 'Y'
+                    
+                            
+    # inicial = True
+    # for m1 in range(1,7):
+    #     for d1 in range(1, 6):
+    #         for h1 in range(1,6):
+    #             if inicial:
+    #                 if m1 !=m2:
+    #                     formula1 = P(h1, d1, m1, Nhoras, Ndias, Nmaterias)
+    #                 inicial = False
+    #             else:
+    #                 formula1 += P(h1, d1, m1, Nhoras, Ndias, Nmaterias) + "O"
     return formula
-print(regla1())
+
+print(len(regla1()))
 #--------Regla #2 -------------#
 def regla2():
     inicial = 1
@@ -131,8 +153,7 @@ def regla2():
     formula = formula1 + "-" + formula2 + '='
     return formula
 
-
-
+#print(regla2())
     
 
 
@@ -169,6 +190,28 @@ def Inorderp(f):
         return f.label + Inorderp(f.right)
     else:
         return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
-    
-#print(Inorderp(String2Tree(regla1())))
-print(Inorderp(String2Tree(regla2())))
+print("regla 1: ")    
+print(Inorderp(String2Tree(regla1())))
+#print(Inorderp(String2Tree(regla2())))
+#---------------------------horarios test ---------------------------------------#
+M1 = []
+print("-------calculo--------")
+print("Miercoles a las 3: ", P(0, 2, 4, Nmaterias, Ndias, Nhoras))
+print("Viernes a las 7: ", P(0, 4, 0, Nmaterias, Ndias, Nhoras))
+print("Viernes a las 3: ", P(0, 4, 4, Nmaterias, Ndias, Nhoras))
+print("Martes a las 7: ",  P(0, 1, 0, Nmaterias, Ndias, Nhoras))
+print("Jueves a las 7: ", P(0, 3, 0, Nmaterias, Ndias, Nhoras))
+M1.append(P(0, 2, 4, Nmaterias, Ndias, Nhoras))
+M1.append(P(0, 4, 0, Nmaterias, Ndias, Nhoras))
+M1.append(P(0, 4, 4, Nmaterias, Ndias, Nhoras))
+M1.append(P(1, 4, 1, Nmaterias, Ndias, Nhoras))
+
+M2 = []
+print("------Algoritmos--------")
+print("Lunes a las 9: ", P(2, 1, 2, Nmaterias, Ndias, Nhoras))
+print("Jueves a la 1: ", P(2, 0, 4, Nmaterias, Ndias, Nhoras))
+print("Sabado a las 10", P(2, 5, 2, Nmaterias, Ndias, Nhoras))
+M2.append(P(2, 1, 2, Nmaterias, Ndias, Nhoras))
+M2.append(P(2, 4, 4, Nmaterias, Ndias, Nhoras))
+M2.append(P(2, 5, 2, Nmaterias, Ndias, Nhoras))
+
