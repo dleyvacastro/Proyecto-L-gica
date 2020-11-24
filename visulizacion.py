@@ -1,9 +1,27 @@
 import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.offsetbox import AnnotationBbox, OffsetImage
+from matplotlib.offsetbox import AnnotationBbox
 
+print("Listo")
 
+fig, axes = plt.subplots()
+axes.get_xaxis().set_visible(False)
+axes.get_yaxis().set_visible(False)
+
+horizontal_step = 1./7
+vertical_step = 1./6
+tangulos = list()
+
+for i in range(7):
+    tangulos.append(patches.Rectangle((i*horizontal_step, 3*vertical_step), horizontal_step, vertical_step, facecolor='black'))
+
+for t in tangulos:
+    axes.add_patch(t)
+
+fig.savefig("horario1.png")
+"""
 def tablero(f, n):
     days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo"]
     colors = {"Calculo": "red", "Fundamentos": "blue", "Algoritmos": "green", "Lógica": "black", "Cívica": "grey", "Argumentos": "purple", "Electiva": "orange"}
@@ -34,3 +52,4 @@ def tablero(f, n):
         axes.add_patch(t)
 
     fig.savefig("horario_"+n+".png")
+"""
