@@ -44,6 +44,14 @@ def Inorderp(f):
         return f.label + Inorderp(f.right)
     else:
         return "(" + Inorderp(f.left) + f.label + Inorderp(f.right) + ")"
+
+def Inorder(f):
+    if f.right == None:
+        return f.label
+    elif f.label == '-':
+        return f.label + Inorder(f.right)
+    else:
+        return "(" + Inorder(f.left) + f.label + Inorder(f.right) + ")"
     
 #--------------------------------------------------------------------------------------------------------------------------#
 #-------------------------------------Regla 1-----------------------------------------------------#
@@ -137,11 +145,23 @@ def regla4(i):
 
 # print("regla 1: ")    
 # #print(Inorderp(String2Tree(regla1())))
-# print("regla 2:")
-# print(Inorderp(String2Tree(regla2())))
+Regla1I = Inorder(String2Tree(regla1()))
+#print("regla 2:")
+#print(Inorderp(String2Tree(regla2())))
+#Regla2I = Inorder(String2Tree(regla2()))
+#print(Regla2I)
 # print("regla 3: ")
-# #print(Inorderp(String2Tree(regla3())))
+#print(Inorderp(String2Tree(regla3())))
+Regla3I = Inorder(String2Tree(regla3()))
+#print(Regla3I)
 # print("regla 4: ")
+Regla4_0I = Inorder(String2Tree(regla4(0)))
+Regla4_1I = Inorder(String2Tree(regla4(1)))
+Regla4_2I = Inorder(String2Tree(regla4(2)))
+Regla4_3I = Inorder(String2Tree(regla4(3)))
+Regla4_4I = Inorder(String2Tree(regla4(4)))
+Regla4_5I = Inorder(String2Tree(regla4(5)))
+Regla4_6I = Inorder(String2Tree(regla4(6)))
 # for i in range(7):
 #     print("regla 4.{0}: ".format(i))
 # #    print(Inorderp(String2Tree(regla4(i))))
