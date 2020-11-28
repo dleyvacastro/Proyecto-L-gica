@@ -47,7 +47,7 @@ def enFNC(A):
 # Input: A (cadena) en notacion inorder
 # Output: B (cadena), Tseitin
 def Tseitin(A, letrasProposicionalesA):
-    letrasProposicionalesB = [chr(x) for x in range(1000, 30000)]
+    letrasProposicionalesB = [chr(x) for x in range(508, 50000)]
     letrasProposicionales = letrasProposicionalesA + letrasProposicionalesB
     assert(not bool(set(letrasProposicionalesA) & set(letrasProposicionalesB))), u"¡Hay letras proposicionales en común!"
 
