@@ -1,5 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov 23 14:55:36 2020
+
+@author: dleyv
+"""
 from Letras import P
 from Letras import Pinv
+# import sys
+
+# sys.setrecursionlimit(50000)
 
 Nmaterias = 7
 Ndias = 6
@@ -45,8 +54,7 @@ def Inorder(f):
     elif f.label == '-':
         return f.label + Inorder(f.right)
     else:
-        return  Inorder(f.left) + f.label + Inorder(f.right)
-    
+        return "(" + Inorder(f.left) + f.label + Inorder(f.right) + ")" 
 #--------------------------------------------------------------------------------------------------------------------------#
 #-------------------------------------Regla 1-----------------------------------------------------#
 def regla1():
@@ -86,26 +94,40 @@ def regla1():
                     formula += formula2 + '-' + formula1 + '>' + 'Y'
     return formula
 #-------------------------------------Regla 2-----------------------------------------------------#
-def regla2():
+def regla2(i):
     inicial = 1
-    for d in range(6):
-        for m3 in range(7):
-            for h3 in range(6):
-                for m2 in range(7):
-                    for h2 in range(6):
-                        for m1 in range(7):
-                            for h1 in range(6):
-                                if inicial:
-                                    if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
-                                        formula = P(h3, d, m3, Nhoras, Ndias, Nmaterias) + P(h3, d, m3, Nhoras, Ndias, Nmaterias) + 'Y'
-                                        formula += P(h1, d, m1, Nhoras, Ndias, Nmaterias) + 'Y'
-                                        inicial = 0
-                                else :
+    # for d in range(6):
+    #     for m3 in range(7):
+    #         for h3 in range(6):
+    #             for m2 in range(7):
+    #                 for h2 in range(6):
+    #                     for m1 in range(7):
+    #                         for h1 in range(6):
+    #                             if inicial:
+    #                                 if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
+    #                                     formula = P(h3, d, m3, Nhoras, Ndias, Nmaterias) + P(h3, d, m3, Nhoras, Ndias, Nmaterias) + 'Y'
+    #                                     formula += P(h1, d, m1, Nhoras, Ndias, Nmaterias) + 'Y'
+    #                                     inicial = 0
+    #                             else :
                                 
-                                    if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
-                                        formula += P(h3, d, m3, Nhoras, Ndias, Nmaterias) + P(h2, d, m2, Nhoras, Ndias, Nmaterias) + 'Y'
-                                        formula += P(h3, d, m1, Nhoras, Ndias, Nmaterias) + 'Y' + 'O'
-
+    #                                 if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
+    #                                     formula += P(h3, d, m3, Nhoras, Ndias, Nmaterias) + P(h2, d, m2, Nhoras, Ndias, Nmaterias) + 'Y'
+    #                                     formula += P(h3, d, m1, Nhoras, Ndias, Nmaterias) + 'Y' + 'O'
+    for h3 in range(6):
+        for m3 in range(7):
+            for h2 in range(6):
+                for m2 in range(7):
+                    for h1 in range(6):
+                        for m1 in range(7):
+                            if inicial:
+                                if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
+                                    formula = P(h3, i, m3, Nhoras, Ndias, Nmaterias) + P(h3, i, m3, Nhoras, Ndias, Nmaterias) + 'Y'
+                                    formula += P(h1, i, m1, Nhoras, Ndias, Nmaterias) + 'Y'
+                                    inicial = 0
+                            else:
+                                if(m1 != m2 or h1 != h2) and (m1 != m3 or h1 != h3) and (m2 != m3 or h2 != h3):
+                                    formula += P(h3, i, m3, Nhoras, Ndias, Nmaterias) + P(h2, i, m2, Nhoras, Ndias, Nmaterias) + 'Y'
+                                    formula += P(h3, i, m1, Nhoras, Ndias, Nmaterias) + 'Y' + 'O'
     return formula
 # print(regla2())
 #-------------------------------------Regla 2-----------------------------------------------------#
@@ -130,35 +152,47 @@ def regla4(i):
                     if inicial:
                         if d1!=d2 or h1 != h2:
                             formula = P(h2, d2, i, Nhoras, Ndias, Nmaterias) + P(h1, d1, i, Nhoras, Ndias, Nmaterias) + 'Y'
+                            
+                            
                             inicial = 0
                     else:
                         if d1!=d2 or h1 != h2:
-                            formula += P(h2, d2, i, Nhoras, Ndias, Nmaterias) + P(h1, d1, i, Nhoras, Ndias, Nmaterias) + 'Y' + 'O'
+                            formula += P(h2, d2, i, Nhoras, Ndias, Nmaterias) + P(h1, d1, i, Nhoras, Ndias, Nmaterias) + 'Y' + 'O' 
     return formula
 
 #--------------------------------------------------------------------------------------------------#
-# print(Inorderp(String2Tree(P(1, 1, 0, Ndias, Nhoras, Nmaterias))))
+# print(Inorderp(String2Tree(P(1, 5, 6, Ndias, Nhoras, Nmaterias))))
 # print("regla 1: ")    
 # #print(Inorderp(String2Tree(regla1())))
 Regla1I = Inorder(String2Tree(regla1()))
 # print(Regla1I)
 #print("regla 2:")
 #print(Inorderp(String2Tree(regla2())))
-#Regla2I = Inorder(String2Tree(regla2()))
-#print(Regla2I)
+# Regla2I = Inorderp(String2Tree(regla2(0)))
+# print(Regla2I)
 # print("regla 3: ")
 #print(Inorderp(String2Tree(regla3())))
 Regla3I = Inorder(String2Tree(regla3()))
 # print(Regla3I)
 # print("regla 4: ")
 Regla4_0I = Inorder(String2Tree(regla4(0)))
+print(Inorderp(String2Tree(regla1())))
 Regla4_1I = Inorder(String2Tree(regla4(1)))
 Regla4_2I = Inorder(String2Tree(regla4(2)))
 Regla4_3I = Inorder(String2Tree(regla4(3)))
 Regla4_4I = Inorder(String2Tree(regla4(4)))
 Regla4_5I = Inorder(String2Tree(regla4(5)))
 Regla4_6I = Inorder(String2Tree(regla4(6)))
-print(Regla4_0I)
+Regla4I = Regla4_0I + Regla4_1I + 'Y'
+Regla4I += Regla4_2I + 'Y' 
+Regla4I += Regla4_3I + 'Y' 
+Regla4I += Regla4_4I + 'Y'
+Regla4I += Regla4_5I + 'Y' 
+Regla4I += Regla4_6I + 'Y'  
+# print(Regla4_0I)
 # for i in range(7):
 #     print("regla 4.{0}: ".format(i))
 # #    print(Inorderp(String2Tree(regla4(i))))
+
+R = Regla1I + Regla3I + 'Y'
+R += Regla4I + 'Y'
