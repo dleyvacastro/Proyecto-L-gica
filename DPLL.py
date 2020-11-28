@@ -1,12 +1,14 @@
-#from Letras import letras
+from Letras import letras
 
-LP = [chr(x) for x in range(256, 20000)]
+# LP = [chr(x) for x in range(256, 20000)]
+LP = letras + [chr(x) for x in range(508, 50000)]
 def Unidad(s):
     for i in s:
         if len(i) == 1:
             return i[0]
 
 def Complemento(l):
+    # print(l)
     if l in LP:
         return '-' + l
     elif l[1] in LP:
@@ -65,12 +67,3 @@ def DPLL(s, i):
             else:
                 i3[l] = 0
             return DPLL(s3, i3)
-
-"""
-sol ={}
-x, y = DPLL(R1, sol)
-print(x)
-if x:
-    print(y)
-    """
-    
