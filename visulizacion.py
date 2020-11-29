@@ -13,6 +13,7 @@ def horario(modelo):
     fig, axes = plt.subplots()
     axes.get_xaxis().set_visible(False)
     axes.get_yaxis().set_visible(False)
+    axes.invert_yaxis()
 
     horizontal_step = 1./7
     vertical_step = 1./6
