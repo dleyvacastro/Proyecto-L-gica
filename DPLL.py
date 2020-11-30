@@ -1,69 +1,100 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from Letras import letras
+import copy
 
-# LP = [chr(x) for x in range(256, 20000)]
-LP = letras + [chr(x) for x in range(508, 50000)]
-def Unidad(s):
-    for i in s:
-        if len(i) == 1:
-            return i[0]
+letrasProposicionales = letras + [chr(x) for x in range(508, 50000)] 
 
-def Complemento(l):
-    # print(l)
-    if l in LP:
+c = 0
+# letrasProposicionales = ['p', 'q', 'r', 's', 't'] + [chr(x) for x in range(508, 50000)]
+
+#Encuentra el complemento de un literal
+#Recibe el literal l
+def complemento(l):
+    
+    if l in letrasProposicionales:
         return '-' + l
-    elif l[1] in LP:
+    elif l[0] == '-':
         return l[1]
     else:
-        my_error = ValueError("ERROR")
-        raise my_error
+        raise Exception(f"error, literal invalido {l}")
 
-def unit_Propagate(s, i):
-    unidad = Unidad(s)
-    while ([] not in s) and (unidad != None):
-        com = Complemento(unidad)
-        s = [c for c in s if unidad not in c]
-        for c in s:
-            if com in c:
-                c.remove(com)
-        if unidad[0] == '-':
-            i[com] = 0
+def hay_unidad(S):
+    for i in S:
+        if len(i) == 1:
+            return i[0]
+    return None
+    
+
+#Subrutina de unit propagation
+#Recibe S: un conjunto de clausulas e I: una interpretación
+def unit_propagate(S, I):
+    unidad= hay_unidad(S)
+    while ([] not in S) and (unidad != None):
+        if len(unidad) == 1:
+            I[unidad] = 1
         else:
-            i[unidad] = 1
-        unidad = Unidad(s)
-    return s, i
+            I[complemento(unidad)] = 0
+        S = [c for c in S if unidad not in c]
 
-
-def DPLL(s, i):
-    s, i = unit_Propagate(s, i)
-    if [] in s:
-        return False, {}
-    elif len(s) == 0:
-        return True, i
-    else:
+        comp = complemento(unidad)
+        for i in S:
+            if comp in i:
+                i.remove(comp)
         
-        l = s[0][0]
-        com = Complemento(l)
-        s2 = [j[:] for j in s if l not in j]
-        for x in s2:
-            if com in x:
-                x.remove(com)
-        i2 = i
-        if l[0] == '-':
-            i2[com] = 0
-        else:
-            i2[l] = 1
+        unidad = hay_unidad(S)
+        
+    return S, I
+
+def DPLL(S, I):
+    print(len(S))
+    S, I = unit_propagate(S, I)
+    if [] in S:
+        return "Insatisfacible", {}
+    if S == []:
+        return "Satisfacible", I
+    
+    count = {}
+    max = [None, 0]
+    for i in S:
+        for j in i:
+            count[j] = count.get(j, 0) + 1
+            if count[j] > max[1]:
+                max[0] = j
+                max[1] = count[j]
+                
+    Ip = copy.deepcopy(I)                
+    unidad = max[0]
+    comp = complemento(unidad)
+    
+    if len(unidad) == 1:
+        Ip[unidad] = 1
+    else:
+        Ip[comp] = 0
+    
+    Sp = [c[:] for c in S if unidad not in c]
+
+    for i in Sp:
+        if comp in i:
+            i.remove(comp)
             
-        x, y = DPLL(s2, i2)
-        if x == True:
-            return True, i2
+    ret = DPLL(Sp, Ip)
+    if ret[0] == "Satisfacible":
+        return "Satisfacible", ret[1]
+    
+    else:
+        Ipp = copy.deepcopy(I)
+        if len(unidad) == 1:
+            Ipp[unidad] = 0
         else:
-            s3 = [x[:] for x in s if com not in x]
-            for x in s3:
-                if l in x:
-                    x.remove(l)
-            i3 = i
-            if l[0] == '-':
-                i3[com] = 1
-            else:
-                i3[l] = 0
-            return DPLL(s3, i3)
+            Ipp[comp] = 1
+        
+        comp = complemento(unidad)
+        Spp = [c[:] for c in S if comp not in c]
+        
+        for i in Spp:
+            if unidad in i:
+                i.remove(unidad)
+            
+        return DPLL(Spp, Ipp)
+            
